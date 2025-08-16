@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi DANA - Layanan Lengkap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --dana-primary: #00aaef;
+            --dana-secondary: #0084ad;
+            --dana-accent: #e6f7fb;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            max-width: 414px;
+            margin: 0 auto;
+            position: relative;
+            height: 896px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .nav-active {
+            color: var(--dana-primary);
+            position: relative;
+        }
+        
+        .nav-active:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: var(--dana-primary);
+            border-radius: 50%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 170, 239, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 170, 239, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 170, 239, 0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 relative">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 pb-6">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center border-2 border-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-xs">Selamat Datang</p>
+                    <p class="font-medium">User DANA</p>
+                </div>
+            </div>
+            <div class="flex space-x-4">
+                <button class="p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-xl p-4 shadow-lg">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <p class="text-xs text-gray-500">Saldo DANA</p>
+                    <p class="font-bold text-2xl text-gray-800">Rp<span id="balance">1.487.500</span></p>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="topUpBtn" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Top Up
+                    </button>
+                    <button id="withdrawBtn" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                        </svg>
+                        Tarik
+                    </button>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Termasuk saldo DANA Kaget Rp15.000
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pb-24 overflow-y-auto" style="height: calc(100% - 230px)">
+        <!-- DANA Features -->
+        <section class="p-5">
+            <div class="grid grid-cols-4 gap-3 mb-5">
+                <button id="sendMoneyBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">Kirim Uang</span>
+                </button>
+                
+                <button id="qrPayBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">QRIS</span>
+                </button>
+                
+                <button id="pulsaBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">Pulsa/Data</span>
+                </button>
+                
+                <button id="danaDealsBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">DANA Deals</span>
+                </button>
+            </div>
+
+            <!-- DANA Services List -->
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                <!-- DanaPoly -->
+                <button id="danaPolyBtn" class="flex justify-between items-center p-4 w-full border-b border-gray-100 hover:bg-blue-50 transition duration-200">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-left">DANA Poly</h3>
+                            <p class="text-xs text-gray-500 text-left">Games & Hiburan</p>
+                        </div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                
+                <!-- Reward -->
+                <button id="rewardBtn" class="flex justify-between items-center p-4 w-full border-b border-gray-100 hover:bg-blue-50 transition duration-200">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2h8zm0 0v4m0 4H6m6 0h6m-6 0h4a2 2 0 002-2v-4a2 2 0 00-2-2h-4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-left">Reward</h3>
+                            <p class="text-xs text-gray-500 text-left">Kumpulkan & tukarkan poin</p>
+                        </div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                
+                <!-- Google Play -->
+                <button id="googlePlayBtn" class="flex justify-between items-center p-4 w-full border-b border-gray-100 hover:bg-blue-50 transition duration-200">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-left">Google Play</h3>
+                            <p class="text-xs text-gray-500 text-left">Voucher & Entertainment</p>
+                        </div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                
+                <!-- Pulsa/Data -->
+                <button id="pulsaDataBtn" class="flex justify-between items-center p-4 w-full border-b border-gray-100 hover:bg-blue-50 transition duration-200">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-left">Pulsa & Data</h3>
+                            <p class="text-xs text-gray-500 text-left">Isi ulang pulsa & paket data</p>
+                        </div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Promo Banner -->
+            <div class="mt-5 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl p-4 text-white">
+                <h3 class="font-bold text-lg mb-1">Cashback Hingga 50%</h3>
+                <p class="text-sm mb-3">Di berbagai merchant dengan pembayaran DANA</p>
+                <button id="promoBtn" class="bg-white text-blue-600 px-4 py-2 rounded-lg text-sm font-medium">Lihat Promo</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around py-2">
+        <a href="#" class="flex flex-col items-center text-blue-600 nav-active">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <span class="text-xs mt-1">Beranda</span>
+        </a>
+        <a href="#" class="flex flex-col items-center text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <span class="text-xs mt-1">Pembayaran</span>
+        </a>
+        <a href="#" class="flex flex-col items-center text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="text-xs mt-1">Dompet</span>
+        </a>
+        <a href="#" class="flex flex-col items-center text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <span class="text-xs mt-1">Profil</span>
+        </a>
+    </nav>
+
+    <script>
+        // Functionality for all buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            // Top Up Button
+            document.getElementById('topUpBtn').addEventListener('click', function() {
+                alert('Fitur Top Up: Pilih metode top up (Bank Transfer, Gerai Retail, Kartu Kredit)');
+            });
+            
+            // Withdraw Button
+            document.getElementById('withdrawBtn').addEventListener('click', function() {
+                alert('Fitur Tarik Dana: Tarik saldo ke rekening bank atau gerai retail');
+            });
+            
+            // Feature Buttons
+            document.getElementById('sendMoneyBtn').addEventListener('click', function() {
+                alert('Fitur Kirim Uang: Transfer ke sesama pengguna DANA atau bank lain');
+            });
+            
+            document.getElementById('qrPayBtn').addEventListener('click', function() {
+                alert('Fitur QRIS: Pembayaran dengan scan QR code merchant');
+            });
+            
+            document.getElementById('pulsaBtn').addEventListener('click', function() {
+                alert('Fitur Pulsa: Beli pulsa atau paket data langsung dari DANA');
+            });
+            
+            document.getElementById('danaDealsBtn').addEventListener('click', function() {
+                alert('DANA Deals: Voucher dan promo eksklusif dari merchant partner');
+            });
+            
+            // Service List Buttons
+            document.getElementById('danaPolyBtn').addEventListener('click', function() {
+                alert('DANA Poly: Games dan hiburan seru dengan hadiah menarik');
+            });
+            
+            document.getElementById('rewardBtn').addEventListener('click', function() {
+                alert('DANA Reward: Kumpulkan dan tukarkan poin dengan hadiah menarik');
+            });
+            
+            document.getElementById('googlePlayBtn').addEventListener('click', function() {
+                alert('Google Play: Beli voucher Google Play untuk aplikasi, game, dan konten digital');
+            });
+            
+            document.getElementById('pulsaDataBtn').addEventListener('click', function() {
+                alert('Pulsa & Data: Isi ulang pulsa semua operator dan beli paket data');
+            });
+            
+            // Promo Button
+            document.getElementById('promoBtn').addEventListener('click', function() {
+                alert('Lihat Promo: Promo dan cashback menarik dari berbagai merchant');
+            });
+            
+            // Balance animation
+            setTimeout(() => {
+                document.getElementById('balance').style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    document.getElementById('balance').style.transform = 'scale(1)';
+                }, 300);
+            }, 500);
+        });
+    </script>
+</body>
+</html>
