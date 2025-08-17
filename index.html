@@ -1,152 +1,546 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aplikasi DANA - Layanan Lengkap</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root { --dana-primary: #00aaef; --dana-secondary: #0084ad; --dana-accent: #e6f7fb; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f5f5f5;
-      max-width: 414px; margin: 0 auto; position: relative;
-      height: 896px; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-    .nav-active { color: var(--dana-primary); position: relative; }
-    .nav-active:after { content:''; position:absolute; bottom:-8px; left:50%; transform:translateX(-50%);
-      width:6px; height:6px; background-color:var(--dana-primary); border-radius:50%; }
-    .feature-card:hover { transform:translateY(-3px); box-shadow:0 10px 20px rgba(0,0,0,0.1); }
-    @keyframes pulse {0%{box-shadow:0 0 0 0 rgba(0,170,239,0.4);}70%{box-shadow:0 0 0 10px rgba(0,170,239,0);}100%{box-shadow:0 0 0 0 rgba(0,170,239,0);}}
-    .promo-slider {width:100%; overflow:hidden; border:2px solid #00aaef; border-radius:8px; margin:15px 0; height:120px; position:relative;}
-    .slider-container {display:flex; width:500%; height:100%; transition:transform 0.5s ease;}
-    .slide {width:20%; height:100%; display:flex; justify-content:center; align-items:center;}
-    .slide img {width:100%; height:100%; object-fit:cover;}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi DANA - Layanan Lengkap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --dana-primary: #00aaef;
+            --dana-secondary: #0084ad;
+            --dana-accent: #e6f7fb;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            max-width: 414px;
+            margin: 0 auto;
+            position: relative;
+            height: 896px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .nav-active {
+            color: var(--dana-primary);
+            position: relative;
+        }
+        
+        .nav-active:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: var(--dana-primary);
+            border-radius: 50%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 170, 239, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 170, 239, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 170, 239, 0); }
+        }
+
+        /* Promo Slider Styles */
+        .promo-slider {
+            width: 100%;
+            overflow: hidden;
+            border: 2px solid #00aaef;
+            border-radius: 8px;
+            margin: 15px 0;
+            height: 120px;
+            position: relative;
+        }
+        .slider-container {
+            display: flex;
+            width: 500%;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+        .slide {
+            width: 20%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- Tambahan kecil: ruang untuk bottom nav --- */
+        .with-bottom-space { padding-bottom: 84px; }
+
+        /* --- Modal verifikasi awal (tambahan) --- */
+        #startupVerify {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.98);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999; /* di atas semua */
+        }
+        #startupVerify .box {
+            width: 90%;
+            max-width: 360px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 18px 16px;
+        }
+        #startupVerify .title {
+            font-weight: 600;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        #startupVerify .subtitle {
+            font-size: 12px;
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+        #startupVerify input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            outline: none;
+        }
+        #startupVerify button {
+            width: 100%;
+            padding: 10px 12px;
+            border: 0;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        #startupVerify .btn-primary { background: #00aaef; color: #fff; }
+        #startupVerify .btn-success { background: #22c55e; color: #fff; }
+        #startupVerify .hidden { display: none; }
+
+        /* --- Bottom Nav (tambahan, non-intrusive) --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            background: #fff;
+            border-top: 1px solid #e5e7eb;
+            z-index: 40;
+        }
+        .bottom-nav .row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            padding: 8px 10px;
+        }
+        .bottom-nav button {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 6px 4px; border-radius: 12px;
+            font-size: 11px; color: #6b7280;
+        }
+        .bottom-nav button.active { color: #00aaef; font-weight: 600; }
+    </style>
 </head>
 <body class="bg-gray-50 relative">
-  
-  <!-- Header -->
-  <header class="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 pb-6">
-    <div class="flex justify-between items-center mb-6">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center border-2 border-white">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-          </svg>
+
+    <!-- ======= HEADER (ASLI) ======= -->
+    <header class="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 pb-6">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center border-2 border-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-xs">Selamat Datang</p>
+                    <p class="font-medium">User DANA</p>
+                </div>
+            </div>
+            <div class="flex space-x-4">
+                <button class="p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        <div>
-          <p class="text-xs">Selamat Datang</p>
-          <p class="font-medium">User DANA</p>
+        
+        <div class="bg-white rounded-xl p-4 shadow-lg">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <p class="text-xs text-gray-500">Saldo DANA</p>
+                    <p class="font-bold text-2xl text-gray-800">Rp<span id="balance">1.487.500</span></p>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="topUpBtn" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecp="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Top Up
+                    </button>
+                    <button id="withdrawBtn" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                        </svg>
+                        Tarik
+                    </button>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Termasuk saldo DANA Kaget Rp15.000
+            </p>
         </div>
-      </div>
-      <div class="flex space-x-4">
-        <button class="p-1">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-        </button>
-      </div>
+    </header>
+
+    <!-- ======= MAIN (ASLI) ======= -->
+    <main class="pb-24 overflow-y-auto with-bottom-space" style="height: calc(100% - 230px)">
+        <!-- DANA Features Grid -->
+        <section class="p-5">
+            <div class="grid grid-cols-4 gap-3 mb-5">
+                <!-- Pulsa/Data -->
+                <button id="pulsaDataBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">Pulsa/Data</span>
+                </button>
+                
+                <!-- Listrik -->
+                <button id="listrikBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">Listrik</span>
+                </button>
+                
+                <!-- Google Play -->
+                <button id="googlePlayBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">Google Play</span>
+                </button>
+                
+                <!-- Top Up Game -->
+                <button id="topUpGameBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.71 18.293a1 1 0 001.415 0l5.657-5.657a1 1 0 000-1.414l-5.657-5.657a1 1 0 00-1.414 1.414L13.586 11H4a1 1 0 100 2h9.586l-3.293 3.293a1 1 0 000 1.414z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">Top Up Game</span>
+                </button>
+                
+                <!-- DAGET -->
+                <button id="dagetBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">DAGET</span>
+                </button>
+                
+                <!-- Data+ -->
+                <button id="dataPlusBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">Data+</span>
+                </button>
+                
+                <!-- Kirim Uang -->
+                <button id="sendMoneyBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">Kirim Uang</span>
+                </button>
+                
+                <!-- QRIS -->
+                <button id="qrPayBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-center">QRIS</span>
+                </button>
+            </div>
+
+            <!-- Promo Slider -->
+            <div class="promo-slider">
+                <div class="slider-container" id="promoSlider">
+                    <div class="slide">
+                        <img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Promo+Pulsa+20%" alt="Diskon 20% semua pembelian pulsa dan paket data">
+                    </div>
+                    <div class="slide">
+                        <img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Cashback+Listrik+50%" alt="Cashback 50% untuk pembayaran listrik hingga Rp50.000">
+                    </div>
+                    <div class="slide">
+                        <img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Google+Play+Voucher" alt="Belanja Google Play voucher dapat cashback 15%">
+                    </div>
+                    <div class="slide">
+                        <img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Top+Up+Game+Bonus" alt="Bonus item eksklusif untuk top up game favorit">
+                    </div>
+                    <div class="slide">
+                        <img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Paket+Data+Ekstra" alt="Paket data tambahan 5GB untuk pengguna DANA">
+                    </div>
+                </div>
+            </div>
+
+            <!-- DANA Services List -->
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden mt-5">
+                <!-- DANA Poly -->
+                <button id="danaPolyBtn" class="flex justify-between items-center p-4 w-full border-b border-gray-100 hover:bg-blue-50 transition duration-200">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-left">DANA Poly</h3>
+                            <p class="text-xs text-gray-500 text-left">Games & Hiburan</p>
+                        </div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                
+                <!-- Reward -->
+                <button id="rewardBtn" class="flex justify-between items-center p-4 w-full border-b border-gray-100 hover:bg-blue-50 transition duration-200">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2h8zm0 0v4m0 4H6m6 0h6m-6 0h4a2 2 0 002-2v-4a2 2 0 00-2-2h-4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-left">Reward</h3>
+                            <p class="text-xs text-gray-500 text-left">Kumpulkan & tukarkan poin</p>
+                        </div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                <!-- DANA Deals -->
+                <button id="danaDealsBtn" class="flex justify-between items-center p-4 w-full hover:bg-blue-50 transition duration-200">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-3">
+                            <!-- Lengkapi ikon bintang agar file valid -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 2l2.899 6.026 6.651.967-4.825 4.703 1.139 6.64L12 17.77l-5.864 3.566 1.139-6.64L2.45 8.993l6.651-.967L12 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-left">DANA Deals</h3>
+                            <p class="text-xs text-gray-500 text-left">Diskon & promo pilihan</p>
+                        </div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- ======= Bottom Navigation (tambahan, tidak mengubah di atas) ======= -->
+    <nav class="bottom-nav">
+        <div class="row">
+            <button id="tabHome" class="active">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9.75L12 3l9 6.75V21a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1V9.75z"/>
+                </svg>
+                <span>Beranda</span>
+            </button>
+            <button id="tabAktivitas">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 00-2-2H5m6 8V9a2 2 0 012-2h2m-6 10h6"/>
+                </svg>
+                <span>Aktivitas</span>
+            </button>
+            <button id="tabPay">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/>
+                </svg>
+                <span>Pay/QRIS</span>
+            </button>
+            <button id="tabWallet">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2m0 0h4V9h-4v6z"/>
+                </svg>
+                <span>Dompet</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ======= MODAL VERIFIKASI AWAL (TAMBAHAN) ======= -->
+    <div id="startupVerify">
+        <div class="box">
+            <div class="title">Verifikasi Akun</div>
+            <div class="subtitle">Masuk untuk melanjutkan ke beranda</div>
+
+            <!-- Step 1: Nomor HP -->
+            <div id="verifyStepPhone">
+                <label class="text-sm text-gray-600">Nomor HP</label>
+                <input type="tel" id="startupPhone" placeholder="08xxxxxxxxxx" inputmode="numeric" />
+                <button class="btn-primary mt-3" onclick="startupSendOTP()">Kirim OTP</button>
+            </div>
+
+            <!-- Step 2: OTP -->
+            <div id="verifyStepOTP" class="hidden">
+                <label class="text-sm text-gray-600">Kode OTP</label>
+                <input type="text" id="startupOTP" placeholder="6 digit OTP" inputmode="numeric" maxlength="6" />
+                <button class="btn-success mt-3" onclick="startupVerifyOTP()">Verifikasi OTP</button>
+                <button class="btn-primary mt-2" onclick="startupResendOTP()">Kirim Ulang OTP</button>
+            </div>
+
+            <!-- Step 3: PIN -->
+            <div id="verifyStepPIN" class="hidden">
+                <label class="text-sm text-gray-600">PIN</label>
+                <input type="password" id="startupPIN" placeholder="******" maxlength="6" inputmode="numeric" />
+                <button class="btn-primary mt-3" onclick="startupVerifyPIN()">Masuk</button>
+            </div>
+        </div>
     </div>
-    
-    <div class="bg-white rounded-xl p-4 shadow-lg">
-      <div class="flex justify-between items-start mb-2">
-        <div>
-          <p class="text-xs text-gray-500">Saldo DANA</p>
-          <p class="font-bold text-2xl text-gray-800">Rp<span id="balance">1.487.500</span></p>
-        </div>
-        <div class="flex space-x-2">
-          <button id="topUpBtn" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium flex items-center">Top Up</button>
-          <button id="withdrawBtn" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium flex items-center">Tarik</button>
-        </div>
-      </div>
-      <p class="text-xs text-gray-500 flex items-center">Termasuk saldo DANA Kaget Rp15.000</p>
-    </div>
-  </header>
 
-  <!-- Main Content -->
-  <main class="pb-24 overflow-y-auto" style="height: calc(100% - 230px)">
-    <!-- grid, slider, dll tetap sama -->
-    <section class="p-5">
-      <div class="grid grid-cols-4 gap-3 mb-5">
-        <button id="pulsaDataBtn" class="feature-card bg-white p-3 rounded-xl shadow-sm">Pulsa/Data</button>
-        <button id="listrikBtn" class="feature-card bg-white p-3 rounded-xl shadow-sm">Listrik</button>
-        <button id="googlePlayBtn" class="feature-card bg-white p-3 rounded-xl shadow-sm">Google Play</button>
-        <button id="topUpGameBtn" class="feature-card bg-white p-3 rounded-xl shadow-sm">Top Up Game</button>
-      </div>
-    </section>
-  </main>
+    <!-- ======= SCRIPT ======= -->
+    <script>
+        /* ========= Auto Slide Promo (non-intrusive, hanya menambah) ========= */
+        (function(){
+            const slider = document.getElementById('promoSlider');
+            if (!slider) return;
+            let index = 0;
+            setInterval(() => {
+                index = (index + 1) % 5; // 5 slide
+                slider.style.transform = 'translateX(' + (-index * 20) + '%)';
+            }, 3500);
+        })();
 
-  <!-- Modal Verifikasi -->
-  <div id="verifyModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-2xl shadow-lg w-80 p-5">
-      <h2 class="text-lg font-semibold text-gray-800 mb-3">Verifikasi Akun</h2>
-      
-      <!-- Step 1: Nomor HP -->
-      <div id="stepPhone">
-        <label class="text-sm text-gray-600">Masukkan Nomor HP</label>
-        <input type="tel" id="phoneNumber" placeholder="08xxxxxxxxxx" class="w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400" />
-        <button onclick="sendOTP()" class="mt-3 w-full bg-blue-600 text-white py-2 rounded-lg">Kirim OTP</button>
-      </div>
+        /* ========= VERIFIKASI AWAL ========= */
+        const verifyWrap = document.getElementById('startupVerify');
+        const stepPhone = document.getElementById('verifyStepPhone');
+        const stepOTP   = document.getElementById('verifyStepOTP');
+        const stepPIN   = document.getElementById('verifyStepPIN');
 
-      <!-- Step 2: OTP -->
-      <div id="stepOTP" class="hidden">
-        <label class="text-sm text-gray-600">Masukkan OTP</label>
-        <input type="text" id="otpCode" placeholder="6 digit OTP" class="w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400" />
-        <button onclick="verifyOTP()" class="mt-3 w-full bg-green-600 text-white py-2 rounded-lg">Verifikasi OTP</button>
-      </div>
+        let MOCK_OTP = '123456';
+        let MOCK_PIN = '123456';
 
-      <!-- Step 3: PIN -->
-      <div id="stepPIN" class="hidden">
-        <label class="text-sm text-gray-600">Masukkan PIN</label>
-        <input type="password" maxlength="6" id="userPIN" placeholder="******" class="w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 text-center tracking-widest" />
-        <button onclick="verifyPIN()" class="mt-3 w-full bg-blue-600 text-white py-2 rounded-lg">Masuk</button>
-      </div>
-    </div>
-  </div>
+        function showStep(elShow){
+            [stepPhone, stepOTP, stepPIN].forEach(el => el.classList.add('hidden'));
+            elShow.classList.remove('hidden');
+        }
 
-  <script>
-    let correctOTP = "123456";
-    let correctPIN = "123456";
+        function startupSendOTP(){
+            const phone = document.getElementById('startupPhone').value.trim();
+            if (!/^0[0-9]{9,13}$/.test(phone)){
+                alert('Nomor HP tidak valid');
+                return;
+            }
+            alert('OTP dikirim ke ' + phone + ' (gunakan ' + MOCK_OTP + ' untuk demo)');
+            showStep(stepOTP);
+        }
 
-    // fungsi buka modal di semua tombol penting
-    ["topUpBtn","withdrawBtn","pulsaDataBtn","listrikBtn","googlePlayBtn","topUpGameBtn"].forEach(id=>{
-      document.getElementById(id).addEventListener("click",()=>{
-        document.getElementById("verifyModal").classList.remove("hidden");
-      });
-    });
+        function startupResendOTP(){
+            alert('OTP baru terkirim. (demo: ' + MOCK_OTP + ')');
+        }
 
-    function sendOTP(){
-      let phone = document.getElementById("phoneNumber").value;
-      if(phone.length < 10){ alert("Nomor HP tidak valid!"); return; }
-      alert("OTP dikirim ke "+phone+" (gunakan 123456)");
-      document.getElementById("stepPhone").classList.add("hidden");
-      document.getElementById("stepOTP").classList.remove("hidden");
-    }
+        function startupVerifyOTP(){
+            const otp = document.getElementById('startupOTP').value.trim();
+            if (otp === MOCK_OTP){
+                showStep(stepPIN);
+            } else {
+                alert('OTP salah');
+            }
+        }
 
-    function verifyOTP(){
-      let otp = document.getElementById("otpCode").value;
-      if(otp === correctOTP){
-        document.getElementById("stepOTP").classList.add("hidden");
-        document.getElementById("stepPIN").classList.remove("hidden");
-      } else { alert("OTP salah!"); }
-    }
+        function startupVerifyPIN(){
+            const pin = document.getElementById('startupPIN').value.trim();
+            if (pin === MOCK_PIN){
+                verifyWrap.style.display = 'none'; // buka akses app
+            } else {
+                alert('PIN salah');
+            }
+        }
 
-    function verifyPIN(){
-      let pin = document.getElementById("userPIN").value;
-      if(pin === correctPIN){
-        alert("Verifikasi berhasil ✅");
-        closeModal();
-      } else { alert("PIN salah!"); }
-    }
+        // Cegah scroll di bawah saat modal tampil
+        (function lockScrollWhileVerify(){
+            const main = document.querySelector('main');
+            const lock = () => { if (verifyWrap && verifyWrap.style.display !== 'none') main.style.overflow = 'hidden'; };
+            const unlock = () => { main.style.overflow = 'auto'; };
+            const obs = new MutationObserver(()=>{
+                if (verifyWrap.style.display === 'none') unlock(); else lock();
+            });
+            obs.observe(verifyWrap, { attributes: true, attributeFilter: ['style'] });
+            lock();
+        })();
 
-    function closeModal(){
-      document.getElementById("verifyModal").classList.add("hidden");
-      document.getElementById("stepPIN").classList.add("hidden");
-      document.getElementById("stepOTP").classList.add("hidden");
-      document.getElementById("stepPhone").classList.remove("hidden");
-    }
-  </script>
+        /* ========= (Opsional) Proteksi klik fitur sebelum login ========= */
+        const protectIds = ["topUpBtn","withdrawBtn","pulsaDataBtn","listrikBtn","googlePlayBtn","topUpGameBtn","dagetBtn","dataPlusBtn","sendMoneyBtn","qrPayBtn","danaPolyBtn","rewardBtn","danaDealsBtn"];
+        protectIds.forEach(id=>{
+            const el = document.getElementById(id);
+            if(!el) return;
+            el.addEventListener('click', (e)=>{
+                if (verifyWrap && verifyWrap.style.display !== 'none'){
+                    e.preventDefault();
+                    alert('Silakan verifikasi terlebih dahulu.');
+                }
+            });
+        });
+
+        /* ========= Tab bottom nav (tambahan ringan) ========= */
+        const tabs = ["tabHome","tabAktivitas","tabPay","tabWallet"];
+        tabs.forEach(id=>{
+            const el = document.getElementById(id);
+            if(!el) return;
+            el.addEventListener('click', ()=>{
+                tabs.forEach(tid => {
+                    const x = document.getElementById(tid);
+                    if(x) x.classList.remove('active');
+                });
+                el.classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
