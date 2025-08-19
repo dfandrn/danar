@@ -1,231 +1,258 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aplikasi Demo OTP + Pulsa/PLN</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
-    .page { display: none; padding: 20px; }
-    .active { display: block; }
-    .form-box { max-width: 400px; margin: 100px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);}
-    input, button { width: 100%; padding: 10px; margin: 5px 0; border-radius: 6px; border: 1px solid #ddd; }
-    button { background: #007bff; color: white; cursor: pointer; border: none; }
-    button:hover { background: #0056b3; }
-    .hidden { display: none; }
-    .price-card.active { border:2px solid blue; }
-    .txn-item { display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid #eee; }
-    .badge { background: green; color:white; padding:2px 6px; border-radius:6px; font-size:12px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Wallet Pulsa & PLN</title>
+<style>
+  body { font-family: sans-serif; margin:0; padding:0; background:#f5f5f5; }
+  .container { max-width:500px; margin:auto; padding:10px; }
+  .balance { background:#00aaef; color:white; padding:15px; border-radius:10px; margin-bottom:10px; text-align:center; }
+  button { padding:8px 12px; border:none; border-radius:5px; cursor:pointer; margin-top:5px; }
+  .btn-primary { background:#00aaef; color:white; }
+  .btn-success { background:#28a745; color:white; }
+  .sheet { background:white; border-radius:10px; padding:10px; margin-bottom:10px; display:none; }
+  .sheet.open { display:block; }
+  .price-card { border:1px solid #ddd; padding:8px; border-radius:8px; cursor:pointer; }
+  .price-card.active { border-color:#00aaef; background:#e0f7ff; }
+  .summary { border:1px solid #ddd; padding:8px; border-radius:8px; margin-top:5px; }
+  .txn-item { border-bottom:1px solid #ccc; padding:5px 0; display:flex; justify-content:space-between; }
+  .badge { padding:2px 5px; background:#28a745; color:white; border-radius:4px; font-size:10px; }
+  input { width:100%; padding:6px; margin-top:3px; border-radius:5px; border:1px solid #ccc; }
+</style>
 </head>
 <body>
+<div class="container">
 
-<!-- ========= LOGIN PAGE ========= -->
-<div id="loginPage" class="page active">
-  <div class="form-box">
-    <h2>Login dengan Nomor WA</h2>
-    <input type="text" id="phone" placeholder="Masukkan nomor WA (ex: 6281234567890)">
-    <button id="sendOtpBtn">Kirim OTP</button>
-    <input type="text" id="otp" placeholder="Masukkan OTP" class="hidden">
-    <button id="verifyOtpBtn" class="hidden">Verifikasi OTP</button>
-  </div>
-</div>
+  <div class="balance">Saldo: <span id="balance">0</span></div>
+  <button id="topUpBtn" class="btn-success">Top Up</button>
+  <button id="withdrawBtn" class="btn-primary">Tarik Saldo</button>
 
-<!-- ========= MAIN PAGE ========= -->
-<div id="mainPage" class="page">
-  <h2>Selamat datang!</h2>
-  <p>Saldo: <span id="balance">0</span></p>
-  <button id="topUpBtn">Top Up</button>
-  <button id="withdrawBtn">Tarik</button>
-  
-  <h3>Pembelian PLN</h3>
-  <input id="plnId" placeholder="Masukkan ID Pelanggan">
-  <div id="plnGrid">
-    <div class="price-card" onclick="selectPln(0)">Token 20k</div>
-    <div class="price-card" onclick="selectPln(1)">Token 50k</div>
-    <div class="price-card" onclick="selectPln(2)">Token 100k</div>
+  <!-- Pulsa/Data -->
+  <div class="sheet" id="pulsaSheet">
+    <h3>Pulsa & Paket Data</h3>
+    <input type="tel" id="pulsaPhone" placeholder="Nomor HP">
+    <div id="pulsaGrid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px; margin-top:5px;"></div>
+    <div class="summary" id="pulsaSummary">
+      <div>Harga: <span id="pulsaHarga">0</span></div>
+      <div>Diskon: <span id="pulsaDiskon">0</span></div>
+      <div>Total: <span id="pulsaTotal">0</span></div>
+      <button id="pulsaBayar" class="btn-primary">Bayar Pulsa</button>
+      <button id="pulsaReset">Reset</button>
+    </div>
   </div>
-  <div id="plnSummary" class="hidden">
-    Harga: <span id="plnHarga"></span><br>
-    Admin: <span id="plnAdmin"></span><br>
-    Diskon: <span id="plnDiskon"></span><br>
-    Total: <span id="plnTotal"></span><br>
-    <button id="plnBayar">Bayar</button>
-    <button id="plnReset">Reset</button>
+  <button id="pulsaDataBtn" class="btn-primary">Buka Pulsa & Data</button>
+
+  <!-- PLN -->
+  <div class="sheet" id="listrikSheet">
+    <h3>Listrik Prabayar</h3>
+    <input type="text" id="plnId" placeholder="No. Meter / ID Pelanggan">
+    <div id="plnInfo" style="display:none;">Nama: <span id="plnNama">-</span> Daya: <span id="plnDaya">-</span></div>
+    <div id="plnGrid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px; margin-top:5px;"></div>
+    <div class="summary" id="plnSummary">
+      <div>Harga: <span id="plnHarga">0</span></div>
+      <div>Admin: <span id="plnAdmin">0</span></div>
+      <div>Diskon: <span id="plnDiskon">0</span></div>
+      <div>Total: <span id="plnTotal">0</span></div>
+      <button id="plnBayar" class="btn-primary">Bayar PLN</button>
+      <button id="plnReset">Reset</button>
+    </div>
   </div>
+  <button id="listrikBtn" class="btn-primary">Buka PLN</button>
 
   <h3>Riwayat Transaksi</h3>
-  <div id="emptyTxn">Belum ada transaksi</div>
   <div id="txnList"></div>
+  <div id="emptyTxn">Belum ada transaksi</div>
 </div>
 
 <script>
-/* ========== LOGIN HANDLER ========== */
-const loginPage = document.getElementById('loginPage');
-const mainPage = document.getElementById('mainPage');
-const sendOtpBtn = document.getElementById('sendOtpBtn');
-const verifyOtpBtn = document.getElementById('verifyOtpBtn');
-const otpInput = document.getElementById('otp');
-const phoneInput = document.getElementById('phone');
-
-sendOtpBtn.addEventListener('click', async ()=>{
-  const phone = phoneInput.value.trim();
-  if(!phone){ alert("Masukkan nomor WA terlebih dahulu"); return; }
-  try {
-    const res = await fetch("http://localhost:3000/send-otp", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ phone })
-    });
-    const data = await res.json();
-    if(data.success){
-      alert("OTP berhasil dikirim ke WA");
-      otpInput.classList.remove("hidden");
-      verifyOtpBtn.classList.remove("hidden");
-    } else {
-      alert("Gagal kirim OTP");
-    }
-  } catch(e){ alert("Error API: "+e.message); }
-});
-
-verifyOtpBtn.addEventListener('click', async ()=>{
-  const phone = phoneInput.value.trim();
-  const otp = otpInput.value.trim();
-  if(!otp){ alert("Masukkan OTP"); return; }
-  try {
-    const res = await fetch("http://localhost:3000/verify-otp", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ phone, otp })
-    });
-    const data = await res.json();
-    if(data.success){
-      alert("Login berhasil!");
-      loginPage.classList.remove("active");
-      mainPage.classList.add("active");
-    } else {
-      alert("OTP salah!");
-    }
-  } catch(e){ alert("Error API: "+e.message); }
-});
-
-/* ========== STORAGE SIMPEL ========== */
+const rupiah = n=>'Rp'+(n||0).toLocaleString('id-ID');
 const storage = {
-  get:(k,def)=>JSON.parse(localStorage.getItem(k) || JSON.stringify(def)),
-  set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))
+  get(k,d){ try{ const v=JSON.parse(localStorage.getItem(k)); return (v===null||v===undefined)?d:v; }catch(e){return d;} },
+  set(k,v){ localStorage.setItem(k,JSON.stringify(v)); }
 };
-const BAL_KEY = "balance", TX_KEY="transactions";
 
-/* ========== PLN DEMO ========== */
-const plnProducts = [
-  { nominal:"20.000", harga:20000, admin:2500, diskon:1000 },
-  { nominal:"50.000", harga:50000, admin:2500, diskon:2000 },
-  { nominal:"100.000", harga:100000, admin:2500, diskon:5000 },
+const BAL_KEY='balance', TX_KEY='history';
+
+// Init Balance
+function initBalance(){
+  let b=storage.get(BAL_KEY,0);
+  document.getElementById('balance').innerText=b.toLocaleString('id-ID');
+}
+initBalance();
+
+// TopUp / Withdraw
+document.getElementById('topUpBtn').addEventListener('click',()=>{
+  let v=prompt('Masukkan top up:','50000');
+  let n=parseInt(v||'0',10);
+  if(!n) return;
+  let bal=storage.get(BAL_KEY,0); bal+=n; storage.set(BAL_KEY,bal);
+  document.getElementById('balance').innerText=bal.toLocaleString('id-ID');
+  alert('Top up berhasil: '+rupiah(n));
+});
+document.getElementById('withdrawBtn').addEventListener('click',()=>{
+  let v=prompt('Masukkan tarik saldo:','50000');
+  let n=parseInt(v||'0',10);
+  if(!n) return;
+  let bal=storage.get(BAL_KEY,0);
+  if(bal<n){ alert('Saldo tidak cukup'); return; }
+  bal-=n; storage.set(BAL_KEY,bal);
+  document.getElementById('balance').innerText=bal.toLocaleString('id-ID');
+  alert('Tarik berhasil: '+rupiah(n));
+});
+
+// Pulsa
+const pulsaProducts=[
+  {nominal:'5.000',harga:6000,diskon:500},
+  {nominal:'10.000',harga:11000,diskon:1000},
+  {nominal:'15.000',harga:16000,diskon:1500},
+  {nominal:'20.000',harga:21000,diskon:2000},
+  {nominal:'25.000',harga:26000,diskon:2500},
 ];
-let plnSelected = null;
-
-function rupiah(x){ return "Rp"+x.toLocaleString("id-ID"); }
-
-function selectPln(i){
-  plnSelected = i;
-  document.querySelectorAll("#plnGrid .price-card").forEach((x,j)=>{
-    x.classList.toggle("active", j===i);
+const pulsaGrid=document.getElementById('pulsaGrid');
+let pulsaSelected=null;
+function renderPulsaGrid(){
+  pulsaGrid.innerHTML='';
+  pulsaProducts.forEach((p,i)=>{
+    const div=document.createElement('div');
+    div.className='price-card';
+    div.innerHTML=`${p.nominal}<br>${rupiah(p.harga - p.diskon)} (-${rupiah(p.diskon)})`;
+    div.addEventListener('click',()=>{
+      pulsaSelected=i;
+      document.querySelectorAll('#pulsaGrid .price-card').forEach(x=>x.classList.remove('active'));
+      div.classList.add('active');
+      updatePulsaSummary();
+    });
+    pulsaGrid.appendChild(div);
   });
-  updatePlnSummary();
 }
+renderPulsaGrid();
+function updatePulsaSummary(){
+  const sum=document.getElementById('pulsaSummary');
+  if(pulsaSelected===null){ sum.style.display='none'; return; }
+  const p=pulsaProducts[pulsaSelected];
+  document.getElementById('pulsaHarga').innerText=rupiah(p.harga);
+  document.getElementById('pulsaDiskon').innerText='-'+rupiah(p.diskon);
+  document.getElementById('pulsaTotal').innerText=rupiah(p.harga - p.diskon);
+  sum.style.display='block';
+}
+document.getElementById('pulsaReset').addEventListener('click',()=>{
+  pulsaSelected=null;
+  document.querySelectorAll('#pulsaGrid .price-card').forEach(x=>x.classList.remove('active'));
+  document.getElementById('pulsaSummary').style.display='none';
+  document.getElementById('pulsaPhone').value='';
+});
+document.getElementById('pulsaBayar').addEventListener('click',()=>{
+  const phone=document.getElementById('pulsaPhone').value.trim();
+  if(!/^0[0-9]{9,13}$/.test(phone)){ alert('Nomor HP tidak valid'); return; }
+  if(pulsaSelected===null){ alert('Pilih nominal dulu'); return; }
+  const p=pulsaProducts[pulsaSelected];
+  const total=p.harga - p.diskon;
+  let bal=storage.get(BAL_KEY,0);
+  if(bal<total){ alert('Saldo tidak cukup'); return; }
+  bal-=total; storage.set(BAL_KEY,bal);
+  document.getElementById('balance').innerText=bal.toLocaleString('id-ID');
+  const tx=storage.get(TX_KEY,[]);
+  tx.unshift({type:'pulsa',target:phone,nominal:p.nominal,harga:p.harga,diskon:p.diskon,total:total,status:'Sukses'});
+  storage.set(TX_KEY,tx);
+  renderHistory();
+  alert('Pembelian '+p.nominal+' untuk '+phone+' berhasil. Total: '+rupiah(total));
+  document.getElementById('pulsaReset').click();
+});
+document.getElementById('pulsaDataBtn').addEventListener('click',()=>document.getElementById('pulsaSheet').classList.add('open'));
 
+// PLN
+const plnProducts=[
+  {nominal:'Token 20.000',harga:20000,admin:2500,diskon:1000},
+  {nominal:'Token 50.000',harga:50000,admin:2500,diskon:2000},
+  {nominal:'Token 100.000',harga:100000,admin:2500,diskon:3000},
+];
+const plnGrid=document.getElementById('plnGrid');
+let plnSelected=null;
+function renderPlnGrid(){
+  plnGrid.innerHTML='';
+  plnProducts.forEach((p,i)=>{
+    const div=document.createElement('div');
+    div.className='price-card';
+    div.innerHTML=`${p.nominal}<br>${rupiah(p.harga+p.admin-p.diskon)} (-${rupiah(p.diskon)})`;
+    div.addEventListener('click',()=>{
+      plnSelected=i;
+      document.querySelectorAll('#plnGrid .price-card').forEach(x=>x.classList.remove('active'));
+      div.classList.add('active');
+      updatePlnSummary();
+    });
+    plnGrid.appendChild(div);
+  });
+}
+renderPlnGrid();
+function fakePlnInquiry(id){
+  const names=['BUDI','SITI','ANDI','NUR','INTAN','RIZKY'];
+  const dayaList=['900 VA','1300 VA','2200 VA','3500 VA'];
+  return {nama:names[id.length%names.length]+id.slice(-3),daya:dayaList[id.length%dayaList.length]};
+}
+document.getElementById('plnId').addEventListener('input',(e)=>{
+  const id=e.target.value.trim();
+  const info=document.getElementById('plnInfo');
+  if(/^[0-9]{10,13}$/.test(id)){
+    const res=fakePlnInquiry(id);
+    document.getElementById('plnNama').innerText=res.nama;
+    document.getElementById('plnDaya').innerText=res.daya;
+    info.style.display='block';
+  }else info.style.display='none';
+});
 function updatePlnSummary(){
-  const sum = document.getElementById('plnSummary');
-  if(plnSelected===null){ sum.classList.add('hidden'); return; }
-  const p = plnProducts[plnSelected];
-  const total = p.harga + p.admin - p.diskon;
-  document.getElementById('plnHarga').innerText = rupiah(p.harga);
-  document.getElementById('plnAdmin').innerText = rupiah(p.admin);
-  document.getElementById('plnDiskon').innerText = "- "+rupiah(p.diskon);
-  document.getElementById('plnTotal').innerText = rupiah(total);
-  sum.classList.remove('hidden');
+  const sum=document.getElementById('plnSummary');
+  if(plnSelected===null){ sum.style.display='none'; return; }
+  const p=plnProducts[plnSelected];
+  const total=p.harga+p.admin-p.diskon;
+  document.getElementById('plnHarga').innerText=rupiah(p.harga);
+  document.getElementById('plnAdmin').innerText=rupiah(p.admin);
+  document.getElementById('plnDiskon').innerText='-'+rupiah(p.diskon);
+  document.getElementById('plnTotal').innerText=rupiah(total);
+  sum.style.display='block';
 }
-
-document.getElementById('plnReset').addEventListener('click', ()=>{
+document.getElementById('plnReset').addEventListener('click',()=>{
   plnSelected=null;
   document.querySelectorAll('#plnGrid .price-card').forEach(x=>x.classList.remove('active'));
-  document.getElementById('plnSummary').classList.add('hidden');
+  document.getElementById('plnSummary').style.display='none';
   document.getElementById('plnId').value='';
+  document.getElementById('plnInfo').style.display='none';
 });
-
-document.getElementById('plnBayar').addEventListener('click', ()=>{
-  const idpel = document.getElementById('plnId').value.trim();
-  if(!/^[0-9]{10,13}$/.test(idpel)){ alert("ID pelanggan tidak valid"); return; }
-  if(plnSelected===null){ alert("Pilih nominal dulu"); return; }
-  const p = plnProducts[plnSelected];
-  const total = p.harga + p.admin - p.diskon;
-  let bal = storage.get(BAL_KEY,0);
-  if(bal < total){ alert("Saldo tidak cukup"); return; }
-  bal -= total; storage.set(BAL_KEY,bal);
-  document.getElementById('balance').innerText = bal.toLocaleString("id-ID");
-
-  const tx = storage.get(TX_KEY,[]);
-  tx.unshift({
-    id:"TXN"+Date.now(),
-    ts:new Date().toISOString(),
-    type:"listrik",
-    target:idpel,
-    nominal:p.nominal,
-    harga:p.harga,
-    admin:p.admin,
-    diskon:p.diskon,
-    total:total,
-    status:"Sukses",
-    token:"TKN-"+Math.random().toString(36).slice(2,10).toUpperCase()
-  });
-  storage.set(TX_KEY, tx);
+document.getElementById('plnBayar').addEventListener('click',()=>{
+  const idpel=document.getElementById('plnId').value.trim();
+  if(!/^[0-9]{10,13}$/.test(idpel)){ alert('ID pelanggan / No. meter tidak valid'); return; }
+  if(plnSelected===null){ alert('Pilih nominal token dahulu'); return; }
+  const p=plnProducts[plnSelected];
+  const total=p.harga+p.admin-p.diskon;
+  let bal=storage.get(BAL_KEY,0);
+  if(bal<total){ alert('Saldo tidak cukup'); return; }
+  bal-=total; storage.set(BAL_KEY,bal);
+  document.getElementById('balance').innerText=bal.toLocaleString('id-ID');
+  const inq=fakePlnInquiry(idpel);
+  const tx=storage.get(TX_KEY,[]);
+  tx.unshift({type:'listrik',target:idpel,nama:inq.nama,daya:inq.daya,nominal:p.nominal,harga:p.harga,admin:p.admin,diskon:p.diskon,total:total,status:'Sukses',token:'TKN-'+Math.random().toString(36).slice(2,10).toUpperCase()});
+  storage.set(TX_KEY,tx);
   renderHistory();
-  alert("Pembelian sukses");
+  alert('Pembelian '+p.nominal+' untuk '+idpel+' berhasil. Total: '+rupiah(total));
   document.getElementById('plnReset').click();
 });
+document.getElementById('listrikBtn').addEventListener('click',()=>document.getElementById('listrikSheet').classList.add('open'));
 
-/* ========== HISTORY ========== */
+// Riwayat
 function renderHistory(){
-  const list=document.getElementById("txnList");
-  const empty=document.getElementById("emptyTxn");
+  const list=document.getElementById('txnList');
   const txs=storage.get(TX_KEY,[]);
-  list.innerHTML="";
-  if(!txs.length){ empty.classList.remove("hidden"); return; }
-  empty.classList.add("hidden");
-  txs.forEach(tx=>{
-    const row=document.createElement("div");
-    row.className="txn-item";
-    row.innerHTML=`<div>
-      <div>${tx.type}</div>
-      <div class="text-xs">${new Date(tx.ts).toLocaleString("id-ID")} • ${tx.target}</div>
-      <div>${tx.nominal} ${tx.token? '• Token: '+tx.token:''}</div>
-    </div>
-    <div><b>${rupiah(tx.total)}</b><br><span class="badge">${tx.status}</span></div>`;
-    list.appendChild(row);
+  list.innerHTML='';
+  if(!txs.length){ document.getElementById('emptyTxn').style.display='block'; return; }
+  document.getElementById('emptyTxn').style.display='none';
+  txs.slice(0,100).forEach(tx=>{
+    const div=document.createElement('div'); div.className='txn-item';
+    div.innerHTML=`<div>${tx.type==='pulsa'?'Pulsa/Data':'Listrik'}<br>${tx.target}<br>${tx.nominal}${tx.token?(' • Token: '+tx.token):''}</div>
+                     <div style="text-align:right">${rupiah(tx.total)}<br><span class="badge">${tx.status}</span></div>`;
+    list.appendChild(div);
   });
 }
 renderHistory();
-
-/* ========== TOPUP / WITHDRAW ========== */
-document.getElementById("topUpBtn").addEventListener("click",()=>{
-  const v=prompt("Masukkan nilai top up","50000");
-  const n=parseInt((v||"").replace(/\D/g,""),10);
-  if(!n)return;
-  let bal=storage.get(BAL_KEY,0); bal+=n;
-  storage.set(BAL_KEY,bal);
-  document.getElementById("balance").innerText=bal.toLocaleString("id-ID");
-});
-document.getElementById("withdrawBtn").addEventListener("click",()=>{
-  const v=prompt("Masukkan nilai tarik","50000");
-  const n=parseInt((v||"").replace(/\D/g,""),10);
-  if(!n)return;
-  let bal=storage.get(BAL_KEY,0);
-  if(bal<n){alert("Saldo kurang");return;}
-  bal-=n;
-  storage.set(BAL_KEY,bal);
-  document.getElementById("balance").innerText=bal.toLocaleString("id-ID");
-});
 </script>
-
 </body>
 </html>
