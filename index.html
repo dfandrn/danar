@@ -58,29 +58,6 @@
   </style>
 </head>
 <body class="bg-gray-50 relative">
-
-  <!-- SPLASH SCREEN -->
-<div id="splash">
-  <h1>bahan percobaan<br>#2</h1>
-  </div>
-
-<!-- HEADER -->
-<div id="hdr" class="header hidden">
-  <div class="brand">Dana Tabungan</div>
-  <div class="chip" id="chipUser">Guest</div>
-</div>
-
-<script>
-  // Tunggu 3 detik, lalu hilangkan splash screen
-  setTimeout(function(){
-    document.getElementById("splash").style.opacity = "0";
-    setTimeout(function(){
-      document.getElementById("splash").style.display = "none";
-      document.getElementById("main").style.display = "block";
-    }, 800); // tunggu transisi fade-out selesai
-  }, 3000);
-</script>
-
   <!-- ======= HEADER (ASLI) ======= -->
   <header class="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 pb-6">
     <div class="flex justify-between items-center mb-6">
