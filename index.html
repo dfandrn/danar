@@ -58,7 +58,6 @@
   </style>
 </head>
 <body class="bg-gray-50 relative">
-   
 
   <!-- ======= HEADER (ASLI) ======= -->
   <header class="bg-gradient-to-r from-purple-600 to-blue-500 text-white p-4 pb-6">
@@ -115,21 +114,6 @@
   <!-- ======= MAIN (ASLI) ======= -->
   <main id="mainScroll" class="pb-24 overflow-y-auto with-bottom-space" style="height: calc(100% - 230px)">
       
-  <!-- Tombol buka menu -->
-  <button id="trigger" class="button">List Menu</button>
-
-  <!-- Overlay fullscreen -->
-  <div id="overlay" class="overlay">
-    <button id="close" class="close-btn">✕</button>
-    <div class="menu-list">
-      <a href="#" class="menu-item">Beranda</a>
-      <a href="#" class="menu-item">Tentang</a>
-      <a href="#" class="menu-item">Layanan</a>
-      <a href="#" class="menu-item">Kontak</a>
-    </div>
-  </div>
-    
-    
     <!-- Section: Beranda -->
     <section id="homeSection" class="p-5">
       <div class="grid grid-cols-4 gap-3 mb-5">
@@ -875,32 +859,8 @@
       document.getElementById('balance').innerText = bal.toLocaleString('id-ID');
       alert('Tarik saldo berhasil: '+rupiah(n));
     });
-
-
-  // Ambil elemen
-  const trigger = document.getElementById("trigger");
-  const overlay = document.getElementById("overlay");
-  const closeBtn = document.getElementById("close");
-
-  // Buka overlay
-  trigger.addEventListener("click", () => {
-    overlay.classList.add("active");
-  });
-
-  // Tutup overlay
-  closeBtn.addEventListener("click", () => {
-    overlay.classList.remove("active");
-  });
-
-  // Tutup overlay kalau klik area di luar menu
-  overlay.addEventListener("click", (e) => {
-    if (e.target === overlay) {
-      overlay.classList.remove("active");
-    }
-  });
-</script>
     /* ========= Expose for inline buttons from HTML ========= */
-    window.logout = logout;
+    window.logout = logout:
   </script>
 </body>
 </html>
