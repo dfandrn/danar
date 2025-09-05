@@ -8,44 +8,160 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
   
+  /* ==== Menu kecil di Beranda ==== */
+.feature-card {
+  padding: 6px;               /* lebih kecil dari p-3 */
+  border-radius: 0.5rem;      /* rounded-lg */
+  font-size: 10px;            /* text-[10px] */
+}
+
+.feature-card .menu-icon,
+.feature-card div.w-12,
+.feature-card div.w-10 {
+  width: 40px;                /* w-10 */
+  height: 40px;               /* h-10 */
+  border-radius: 9999px;      /* bulat penuh */
+  margin-bottom: 4px;         /* mb-1 */
+}
+
+.feature-card svg,
+.feature-card img {
+  width: 20px;                /* w-5 */
+  height: 20px;               /* h-5 */
+}
   
- /*style on/of*/
-  .theme-toggle-container {
-    text-align: center;
-    padding: 2rem 1rem;
-  }
+  
+  
+  
+  
+/* Grid menu kecil */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;              /* jarak antar item lebih rapat */
+  padding: 8px 12px;     /* padding lebih kecil */
+}
 
-  .theme-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-  }
+/* Kotak menu lebih kecil */
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 10px;       /* teks kecil */
+  color: #1565c0;
+}
 
-  .theme-sub {
-    font-size: 0.9rem;
-    color: gray;
-    margin-bottom: 1.2rem;
-  }
+/* Icon kotak kecil */
+.menu-icon {
+  width: 40px;           /* lebih kecil dari sebelumnya */
+  height: 40px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #90caf9;
+  box-shadow: 0 1px 3px rgba(30,136,229,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
 
-  .theme-toggle-btn {
-    background: #22c55e; /* hijau kayak GoPay */
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 999px;
-    padding: 0.8rem 2rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
+/* Icon gambar di dalam lebih kecil */
+.menu-icon img {
+  width: 20px;
+  height: 20px;
+}
+  
+  
+.theme-toggle-container {
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
 
-  .theme-toggle-btn:hover {
-    background: #16a34a;
-  }
+.theme-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
 
+.theme-sub {
+  font-size: 0.85rem;
+  color: gray;
+  margin-bottom: 1rem;
+}
 
+/* Biar tombol tidak bikin teks bubar */
+.theme-toggle-btn {
+  display: inline-block;       /* tombol jadi inline, ga full lebar */
+  margin: 0 auto;              /* tetap center */
+  background: linear-gradient(145deg, #ffaa00, #ff8800); 
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 26px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  box-shadow: 0 4px #cc7700, 0 6px 12px rgba(0,0,0,0.2);
+}
 
+/* Hover → naik dikit */
+.theme-toggle-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px #cc7700, 0 8px 14px rgba(0,0,0,0.25);
+}
 
+/* Klik → turun */
+.theme-toggle-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px #cc7700, 0 4px 8px rgba(0,0,0,0.2);
+}
+  
+
+  /* Base style biar rapi */
+.theme-toggle-btn {
+  display: inline-block;
+  margin: 0 auto;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 26px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Light Mode button */
+.theme-toggle-btn.light {
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  color: #333;
+  box-shadow: 0 4px #d9d9d9, 0 6px 12px rgba(0,0,0,0.15);
+}
+.theme-toggle-btn.light:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px #d9d9d9, 0 8px 14px rgba(0,0,0,0.2);
+}
+.theme-toggle-btn.light:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px #d9d9d9, 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Dark Mode button */
+.theme-toggle-btn.dark {
+  background: linear-gradient(145deg, #222, #000);
+  color: #fff;
+  box-shadow: 0 4px #111, 0 6px 12px rgba(0,0,0,0.3);
+}
+.theme-toggle-btn.dark:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px #111, 0 8px 14px rgba(0,0,0,0.35);
+}
+.theme-toggle-btn.dark:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px #111, 0 4px 8px rgba(0,0,0,0.25);
+}
+  
 
   
 /* === DARK MODE === */
@@ -103,11 +219,6 @@ body.dark-mode .theme-sub {
 .theme-toggle-btn:hover {
   background: #008ecc;
 }
-
-
-
-
-
 
 
   /* Notifikasi kecil (atas) */
@@ -472,13 +583,136 @@ body.dark-mode .theme-sub {
   align-items: center;
   gap: 4px;
 }
+/* === DARK MODE === */
+body.dark-mode {
+  background-color: #121212;   /* abu gelap, bukan hitam pekat */
+  color: #f5f5f5;
+}
 
-    .promo-slider{ width:100%; overflow:hidden; border:2px solid #00aaef; border-radius:8px; margin:15px 0; height:120px; position:relative;}
-    .slider-container{ display:flex; width:500%; height:100%; transition:transform .1s ease;}
-    .slide{ width:20%; height:100%; display:flex; justify-content:center; align-items:center; }
-    .slide img{ width:100%; height:100%; object-fit:cover;}
+/* Header saldo pakai gradasi biru biar tetap hidup */
+body.dark-mode .header-saldo {
+  background: linear-gradient(135deg, #0d47a1, #1565c0);
+  color: #fff;
+}
 
-    .with-bottom-space{ padding-bottom:84px; }
+/* Card / menu utama */
+body.dark-mode .section,
+body.dark-mode .saldo-card,
+body.dark-mode .feature-card,
+body.dark-mode .notif-card {
+  background-color: #1e1e1e;   /* lebih terang dari background */
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  color: #f5f5f5;
+}
+
+/* Ikon bundar dalam menu */
+body.dark-mode .menu-icon {
+  background: #2a2a2a !important;
+  border: 1px solid #3a3a3a;
+  box-shadow: none;
+}
+
+/* Teks sekunder jangan putih semua */
+body.dark-mode .theme-sub,
+body.dark-mode .notif-time,
+body.dark-mode .note {
+  color: #aaa !important;
+}
+
+/* Judul & teks penting */
+body.dark-mode .theme-title,
+body.dark-mode .notif-text strong,
+body.dark-mode .saldo-row .amount {
+  color: #fff !important;
+}
+
+/* Efek hover biar ada dimensi */
+body.dark-mode .feature-card:hover,
+body.dark-mode .notif-card:hover {
+  background-color: #222;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* Tombol toggle mode */
+body.dark-mode .theme-toggle-btn {
+  background: #444;
+  color: #fff;
+}
+
+body.dark-mode .theme-toggle-btn:hover {
+  background: #666;
+}
+
+
+/* === DARK MODE FIX NOTIF === */
+body.dark-mode .notif-small {
+  background: #1e1e1e;   /* abu gelap */
+  color: #f5f5f5;        /* teks putih */
+  border: 1px solid #333;
+}
+
+body.dark-mode .notif-small strong {
+  color: #00aaff; /* biru terang biar kontras */
+}
+
+body.dark-mode .notif-card {
+  background: #1e1e1e;   /* card gelap */
+  color: #f5f5f5;
+  border: 1px solid #333;
+}
+
+body.dark-mode .notif-text strong {
+  color: #ffffff;  /* biar lebih jelas */
+}
+
+body.dark-mode .notif-time {
+  color: #aaa; /* abu muda biar beda */
+}
+
+
+
+/* Promo Slider Wrapper */
+.promo-slider {
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid #00aaef;
+  border-radius: 8px;
+  margin: 15px 0;
+  height: 160px;       /* atur tinggi lebih besar biar kayak awal */
+  position: relative;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+/* Container untuk slide */
+.slider-container {
+  display: flex;
+  width: 500%; /* 5 slide */
+  height: 100%;
+  transition: transform 0.5s ease;
+}
+
+/* Slide */
+.slide {
+  width: 20%; /* karena ada 5 slide */
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Gambar dalam slide */
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 6px;
+}
+
+
 
     /* Startup Verify Modal (login) */
     #startupVerify{ position:fixed; inset:0; background:rgba(255,255,255,.98); display:flex; align-items:center; justify-content:center; z-index:9999;}
@@ -491,8 +725,47 @@ body.dark-mode .theme-sub {
     #startupVerify .btn-success{ background:#22c55e; color:#fff;}
     #startupVerify .hidden{ display:none;}
 
-    /* Bottom nav */
-    .bottom-nav{ position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:414px; background:#fff; border-top:1px solid #e5e7eb; z-index:40;}
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 414px;
+  border-top: 1px solid #e5e7eb;
+  z-index: 40;
+  background: #fff; /* default putih biar aman */
+}
+
+/* Light Mode */
+body.light-mode .bottom-nav {
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
+}
+body.light-mode .bottom-nav button {
+  color: #6b7280;
+}
+body.light-mode .bottom-nav button.active {
+  color: #00aaef;
+}
+
+/* Dark Mode */
+body.dark-mode .bottom-nav {
+  background: #111; /* hampir hitam */
+  border-top: 1px solid #333;
+}
+body.dark-mode .bottom-nav button {
+  color: #aaa; /* abu biar kelihatan */
+}
+body.dark-mode .bottom-nav button.active {
+  color: #00aaef; /* tetap biru biar konsisten */
+  font-weight: 600;
+}
+
+
+
+
+
     .bottom-nav .row{ display:grid; grid-template-columns: repeat(5, 1fr); gap:6px; padding:8px 10px;}
     .bottom-nav button{ display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6px 4px; border-radius:12px; font-size:11px; color:#6b7280;}
     .bottom-nav button.active{ color:#00aaef; font-weight:600;}
@@ -675,184 +948,176 @@ body.dark-mode .theme-sub {
 
 
     
-    <!-- Section: Beranda -->
-    <section id="homeSection" class="p-5">
-      <div class="grid grid-cols-4 gap-3 mb-5">
-          
-<!-- Pulsa/Data -->
-<button id="pulsaDataBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
-  <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-    <!-- GANTI ICON DI SINI -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
-      <!-- contoh icon sinyal (pulsa/data) -->
-      <path d="M3 17h2v4H3v-4zm4-4h2v8H7v-8zm4-6h2v14h-2V7zm4-4h2v18h-2V3zm4 8h2v10h-2V11z"/>
-    </svg>
-  </div>
-  <span class="text-xs text-center">Pulsa/Data</span>
-</button>
-
-        <!-- Listrik -->
-        <button id="listrikBtn" class="feature-card flex flex-col items-center bg-white p-2 rounded-xl shadow-sm transition duration-300">
-          <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          <span class="text-xs text-center">Listrik</span>
-        </button>
-
-
-<!-- Top Up Game -->
-<button id="topUpGameBtn" 
-  class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300 hover:shadow-md">
-  <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-2 overflow-hidden">
-    <img src="https://raw.githubusercontent.com/dfandrn/Gambar/refs/heads/main/file_00000000232c622fa29bb39098993afc.png"  
-         alt="Top Up Game" class="w-8 h-8 object-contain block">
-  </div>
-  <span class="text-xs text-center">Top Up Game</span>
-</button>
-
-<!-- davigo coint -->
-<button id="topUpGameBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
-  <div class="w-9 h-10 bg-black-100 rounded-full flex items-center justify-center mb-2">
-    <img src="https://raw.githubusercontent.com/dfandrn/danar/refs/heads/main/file_00000000fb8461fa8f688e39694d1f89.png" 
-       alt="Top Up Game" width="100">
-       
-  </div>
-  <span class="text-sm font-small">davigo point</span>
-</button>
-
-
-<!-- Tombol trigger -->
-<button id="trigger" class="button">
-          <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-          </div>
-          </button>
-
-
-        <!-- Data+ -->
-        <button id="dataPlusBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
-          <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-          </div>
-          <span class="text-xs text-center">Data+</span>
-        </button>
-
-
-        <!-- Kirim Uang -->
-        <button id="sendMoneyBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
-          <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <span class="text-xs text-center">Kirim Uang</span>
-        </button>
-
-        <!-- QRIS -->
-        <button id="qrPayBtn" class="feature-card flex flex-col items-center bg-white p-3 rounded-xl shadow-sm transition duration-300">
-          <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-            </svg>
-          </div>
-          <span class="text-xs text-center">QRIS</span>
-        </button>
+<!-- Section: Beranda -->
+<section id="homeSection" class="p-5">
+  <div class="grid grid-cols-4 gap-3 mb-5">
+    
+    <!-- Pulsa/Data -->
+    <button id="pulsaDataBtn" class="feature-card flex flex-col items-center bg-white p-2 rounded-lg shadow-sm transition duration-300">
+      <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 17h2v4H3v-4zm4-4h2v8H7v-8zm4-6h2v14h-2V7zm4-4h2v18h-2V3zm4 8h2v10h-2V11z"/>
+        </svg>
       </div>
+      <span class="text-[10px] text-center">Pulsa/Data</span>
+    </button>
 
-      <!-- Promo Slider -->
-      <div class="promo-slider">
-        <div class="slider-container" id="promoSlider">
-          <div class="slide"><img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Promo+Pulsa+20%" alt="Diskon 20% semua pembelian pulsa dan paket data"></div>
-          <div class="slide"><img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Cashback+Listrik+50%" alt="Cashback 50% untuk pembayaran listrik hingga Rp50.000"></div>
-          <div class="slide"><img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Google+Play+Voucher" alt="Belanja Google Play voucher dapat cashback 15%"></div>
-          <div class="slide"><img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Top+Up+Game+Bonus" alt="Bonus item eksklusif untuk top up game favorit"></div>
-          <div class="slide"><img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Paket+Data+Ekstra" alt="Paket data tambahan 5GB untuk pengguna DANA"></div>
-        </div>
+    <!-- Listrik -->
+    <button id="listrikBtn" class="feature-card flex flex-col items-center bg-white p-2 rounded-lg shadow-sm transition duration-300">
+      <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
       </div>
+      <span class="text-[10px] text-center">Listrik</span>
+    </button>
 
- 
- <!-- Notifikasi kecil (atas) -->
-<div class="notif-small">
-  <div class="left">
-    📣 Beberapa orang 👉 🎁 <strong>DANA Deals</strong> oleh 👩‍👩‍👦
+    <!-- Top Up Game -->
+    <button id="topUpGameBtn" class="feature-card flex flex-col items-center bg-white p-2 rounded-lg shadow-sm transition duration-300 hover:shadow-md">
+      <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-1 overflow-hidden">
+        <img src="https://raw.githubusercontent.com/dfandrn/Gambar/refs/heads/main/file_00000000232c622fa29bb39098993afc.png"  
+             alt="Top Up Game" class="w-6 h-6 object-contain block">
+      </div>
+      <span class="text-[10px] text-center">Top Up Game</span>
+    </button>
+
+    <!-- Davigo Point -->
+    <button id="davigoPointBtn" class="feature-card flex flex-col items-center bg-white p-2 rounded-lg shadow-sm transition duration-300">
+      <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mb-1 overflow-hidden">
+        <img src="https://raw.githubusercontent.com/dfandrn/danar/refs/heads/main/file_00000000fb8461fa8f688e39694d1f89.png" 
+             alt="Davigo Point" class="w-6 h-6 object-contain block">
+      </div>
+      <span class="text-[10px] text-center">Davigo Point</span>
+    </button>
+
+    <!-- All Menu -->
+    <button id="trigger" class="feature-card flex flex-col items-center bg-white p-2 rounded-lg shadow-sm transition duration-300">
+      <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </div>
+      <span class="text-[10px] text-center">All Menu</span>
+    </button>
+
+    <!-- Data+ -->
+    <button id="dataPlusBtn" class="feature-card flex flex-col items-center bg-white p-2 rounded-lg shadow-sm transition duration-300">
+      <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      </div>
+      <span class="text-[10px] text-center">Data+</span>
+    </button>
+
+    <!-- Kirim Uang -->
+    <button id="sendMoneyBtn" class="feature-card flex flex-col items-center bg-white p-2 rounded-lg shadow-sm transition duration-300">
+      <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <span class="text-[10px] text-center">Kirim Uang</span>
+    </button>
+
+    <!-- QRIS -->
+    <button id="qrPayBtn" class="feature-card flex flex-col items-center bg-white p-2 rounded-lg shadow-sm transition duration-300">
+      <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+        </svg>
+      </div>
+      <span class="text-[10px] text-center">QRIS</span>
+    </button>
   </div>
-  <div class="right">🔥</div>
-</div>
 
-<!-- Notifikasi besar -->
-<div class="notif-card">
-  <div class="notif-left">
-    <div class="notif-icon">
-      <img src="https://placehold.co/36x36/00AEEF/FFFFFF?text=%F0%9F%91%A5" alt="Teman">
-    </div>
-    <div class="notif-text">
-      <strong>Temanmu</strong> 👉 🎁 dari 👥
+
+  <!-- Promo Slider -->
+  <div class="promo-slider mb-4">
+    <div class="slider-container" id="promoSlider">
+      <div class="slide">
+        <img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Promo+Pulsa+20%" alt="Diskon 20%">
+      </div>
+      <div class="slide">
+        <img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Cashback+Listrik+50%" alt="Cashback PLN">
+      </div>
+      <div class="slide">
+        <img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Google+Play+Voucher" alt="Google Play">
+      </div>
+      <div class="slide">
+        <img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Top+Up+Game+Bonus" alt="Game Bonus">
+      </div>
+      <div class="slide">
+        <img src="https://placehold.co/600x200/00AAEF/FFFFFF?text=Paket+Data+Ekstra" alt="Paket Data">
+      </div>
     </div>
   </div>
-  <div class="notif-time">7d</div>
-</div>
 
-<div class="notif-card">
-  <div class="notif-left">
-    <div class="notif-icon">
-      <img src="https://placehold.co/36x36/0044CC/FFFFFF?text=%F0%9F%9A%9A" alt="DANA">
-    </div>
-    <div class="notif-text">
-      <strong>DANA</strong> Bayar STNK praktis via e-Samsat di DANA
-    </div>
+  <!-- Notifikasi kecil -->
+  <div class="notif-small mb-2">
+    <div class="left">📣 Beberapa orang 👉 🎁 <strong>DANA Deals</strong> oleh 👩‍👩‍👦</div>
+    <div class="right">🔥</div>
   </div>
-  <div class="notif-time">9m</div>
-</div>
- 
- 
-<!-- Bagian pilih tema -->
-<div class="theme-toggle-container">
-  <p class="theme-title">Kamu tim mana?</p>
-  <p class="theme-sub">Sisi gelap atau terang, ayo pilih di sini! 🌟</p>
 
-  <button class="theme-toggle-btn" id="toggleThemeBtn">🌙 Dark Mode</button>
-</div>
- 
+  <!-- Notifikasi besar -->
+  <div class="notif-card">
+    <div class="notif-left">
+      <div class="notif-icon">
+        <img src="https://placehold.co/36x36/00AEEF/FFFFFF?text=%F0%9F%91%A5" alt="Teman">
       </div>
-    </section>
-
-    <!-- Section: Aktivitas / Riwayat -->
-    <section id="activitySection" class="p-5 hidden">
-      <h2 class="text-lg font-semibold mb-3">Aktivitas</h2>
-      <div id="txnList" class="bg-white rounded-xl p-3">
-        <div class="empty-state" id="emptyTxn">Belum ada transaksi.</div>
-        <!-- items injected -->
+      <div class="notif-text">
+        <strong>Temanmu</strong> 👉 🎁 dari 👥
       </div>
-    </section>
+    </div>
+    <div class="notif-time">7d</div>
+  </div>
 
-<!-- Section: Pay/QRIS -->
+  <div class="notif-card">
+    <div class="notif-left">
+      <div class="notif-icon">
+        <img src="https://placehold.co/36x36/0044CC/FFFFFF?text=%F0%9F%9A%9A" alt="DANA">
+      </div>
+      <div class="notif-text">
+        <strong>DANA</strong> Bayar STNK praktis via e-Samsat di DANA
+      </div>
+    </div>
+    <div class="notif-time">9m</div>
+  </div>
+
+  <!-- Toggle tema -->
+  <div class="theme-toggle-container mt-4">
+    <p class="theme-title">Kamu tim mana?</p>
+    <p class="theme-sub">Sisi gelap atau terang, ayo pilih di sini! 🌟</p>
+    <button class="theme-toggle-btn light" id="toggleThemeBtn">☀️ Light Mode</button>
+  </div>
+</section>
+
+<!-- Section lain jangan nyambung -->
+<section id="activitySection" class="p-5 hidden">
+  <h2 class="text-lg font-semibold mb-3">Aktivitas</h2>
+  <div id="txnList" class="bg-white rounded-xl p-3">
+    <div class="empty-state" id="emptyTxn">Belum ada transaksi.</div>
+  </div>
+</section>
+
 <section id="paySection" class="p-5 hidden">
   <div class="bg-white rounded-xl p-4 text-center">
     <p class="text-sm text-gray-600 mb-3">Scan QR untuk bayar</p>
-    
-    <!-- Scanner QRIS -->
     <iframe src="https://dfandrn.github.io/Gambar/" 
             class="w-full h-[70vh] border-0 rounded-xl shadow-lg"></iframe>
   </div>
 </section>
-    <!-- Section: Dompet (placeholder) -->
-    <section id="walletSection" class="p-5 hidden">
-      <div class="bg-white rounded-xl p-4">
-        <h3 class="font-semibold mb-2">Dompet Saya</h3>
-        <ul class="text-sm text-gray-600 space-y-2">
-          <li>Bank tertaut: -</li>
-          <li>Kartu: -</li>
-          <li>Limit harian: Rp 5.000.000</li>
-        </ul>
-      </div>
-    </section
-    
+
+<section id="walletSection" class="p-5 hidden">
+  <div class="bg-white rounded-xl p-4">
+    <h3 class="font-semibold mb-2">Dompet Saya</h3>
+    <ul class="text-sm text-gray-600 space-y-2">
+      <li>Bank tertaut: -</li>
+      <li>Kartu: -</li>
+      <li>Limit harian: Rp 5.000.000</li>
+    </ul>
+  </div>
+</section>
     
     
 
@@ -1462,4 +1727,5 @@ const btn = document.getElementById("toggleThemeBtn");
   </script>
 </body>
 </html>
+
 
