@@ -8,6 +8,47 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
   
+ 
+
+ /* Default (tetap putih di light) */
+.saldo-card { transition: background .25s, color .25s, border-color .25s; }
+
+/* Dark mode khusus saldo card saja (header tetap biru) */
+body.dark-mode #saldoCard {
+  background: #111827 !important;         /* bg-gray-900 */
+  border: 1px solid #374151 !important;    /* border-gray-700 */
+  color: #f3f4f6 !important;               /* text-gray-100 */
+}
+
+/* Paksa semua teks di dalam kartu jadi terang */
+body.dark-mode #saldoCard p,
+body.dark-mode #saldoCard span,
+body.dark-mode #saldoCard .text-gray-800,
+body.dark-mode #saldoCard .text-gray-600,
+body.dark-mode #saldoCard .text-gray-500 {
+  color: #f3f4f6 !important;
+}
+
+/* Icon/eye & stroke */
+body.dark-mode #saldoCard svg { stroke: #e5e7eb !important; }
+body.dark-mode #saldoCard #eyeIcon { color: #d1d5db !important; }
+
+/* Tombol Top Up / Tarik di dalam kartu */
+body.dark-mode #saldoCard #topUpBtn,
+body.dark-mode #saldoCard #withdrawBtn {
+  background: #1f2937 !important;          /* bg-gray-800 */
+  color: #e5e7eb !important;               /* text terang */
+  border: 1px solid #374151 !important;
+}
+
+/* Tombol eye */
+body.dark-mode #saldoCard #toggleSaldoBtn {
+  background: #374151 !important;          /* bg-gray-700 */
+  border-color: #4b5563 !important;        /* border-gray-600 */
+}
+ 
+ 
+  
   /* ==== Menu kecil di Beranda ==== */
 .feature-card {
   padding: 6px;               /* lebih kecil dari p-3 */
@@ -674,15 +715,16 @@ body.dark-mode .notif-time {
 
 /* Promo Slider Wrapper */
 .promo-slider {
-  width: 100%;
+  width: 92%;                 
+  margin: 15px auto;          
   overflow: hidden;
-  border: 2px solid #00aaef;
-  border-radius: 8px;
-  margin: 15px 0;
-  height: 160px;       /* atur tinggi lebih besar biar kayak awal */
+  border: none;               
+  border-radius: 14px;        
+  height: 120px;              
   position: relative;
   box-sizing: border-box;
   background: #fff;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1); /* efek melayang */
 }
 
 /* Container untuk slide */
@@ -693,14 +735,18 @@ body.dark-mode .notif-time {
   transition: transform 0.5s ease;
 }
 
-/* Slide */
+/* Slide wrapper */
 .slide {
-  width: 20%; /* karena ada 5 slide */
+  width: 20%; 
   height: 100%;
   flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.5s ease;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 /* Gambar dalam slide */
@@ -709,9 +755,18 @@ body.dark-mode .notif-time {
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 6px;
+  border-radius: 8px;
+  transition: transform 0.8s ease; 
 }
 
+/* Saat slide aktif → wrapper + img ikut animasi */
+.slide.active {
+  transform: scale(1.05); /* zoom wrapper */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+.slide.active img {
+  transform: scale(1.15); /* zoom img sedikit lebih dalam */
+}
 
 
     /* Startup Verify Modal (login) */
@@ -815,43 +870,43 @@ body.dark-mode .bottom-nav button.active {
     </div>
   </div>
 
-  <!-- SALDO CARD -->
-  <div class="bg-white rounded-xl p-4 shadow-lg">
-    <div class="flex justify-between items-start mb-2">
-      <div>
-        <p class="text-xs text-gray-500">Saldo DANA</p>
-        <div class="flex items-center space-x-2">
-          <p class="font-bold text-2xl text-gray-800">Rp<span id="balance">130.500</span></p>
-          <!-- Tombol eye -->
-          <button id="toggleSaldoBtn" class="p-1 rounded-full bg-gray-100 hover:bg-gray-200 border border-gray-300">
-            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div class="flex space-x-2">
-        <button id="topUpBtn" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg> Top Up
-        </button>
-        <button id="withdrawBtn" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
-          </svg> Tarik
+<!-- SALDO CARD -->
+<div id="saldoCard" class="saldo-card bg-white rounded-xl p-4 shadow-lg">
+  <div class="flex justify-between items-start mb-2">
+    <div>
+      <p class="text-xs text-gray-500">Saldo DANA</p>
+      <div class="flex items-center space-x-2">
+        <p class="font-bold text-2xl text-gray-800">
+          Rp<span id="balance">130.500</span>
+        </p>
+        <button id="toggleSaldoBtn" class="p-1 rounded-full bg-gray-100 hover:bg-gray-200 border border-gray-300">
+          <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
         </button>
       </div>
     </div>
-    <p class="text-xs text-gray-500 flex items-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg> 
-      Termasuk saldo DANA akun demo Rp1.000
-    </p>
+    <div class="flex space-x-2">
+      <button id="topUpBtn" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+        <!-- ... -->
+        Top Up
+      </button>
+      <button id="withdrawBtn" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+        <!-- ... -->
+        Tarik
+      </button>
+    </div>
   </div>
+  <p class="text-xs text-gray-500 flex items-center">
+    <!-- ... -->
+    Termasuk saldo DANA akun demo Rp1.000
+  </p>
+</div>
 </header>
+
+
+
 
   <!-- ======= MAIN (ASLI) ======= -->
   <main id="mainScroll" class="pb-24 overflow-y-auto with-bottom-space" style="height: calc(100% - 230px)">
@@ -1283,11 +1338,69 @@ body.dark-mode .bottom-nav button.active {
     const LOGIN_KEY = 'dana_logged_in';
     const TX_KEY = 'dana_history';
 
-    /* ========= Promo slider ========= */
-    (function(){
-      const slider = document.getElementById('promoSlider'); if(!slider) return;
-      let index=0; setInterval(()=>{ index=(index+1)%5; slider.style.transform='translateX('+(-index*20)+'%)'; }, 3500);
-    })();
+  
+/* ========= Promo slider dengan auto-slide + swipe + scale ========= */
+(function(){
+  const slider = document.getElementById('promoSlider'); 
+  if(!slider) return;
+
+  const slides = slider.querySelectorAll('.slide');
+  let index = 0;
+  let startX = 0;
+  let isDragging = false;
+  let autoSlide;
+
+  // Update tampilan slide + aktifkan animasi scale
+  function updateSlide() {
+    slider.style.transform = 'translateX(' + (-index * 20) + '%)';
+    slides.forEach((s, i) => s.classList.toggle('active', i === index));
+  }
+
+  // Auto slide jalan tiap 3.5 detik
+  function startAutoSlide() {
+    autoSlide = setInterval(() => {
+      index = (index + 1) % slides.length;
+      updateSlide();
+    }, 3500);
+  }
+
+  function stopAutoSlide() {
+    clearInterval(autoSlide);
+  }
+
+  // Event swipe (mobile / touch)
+  slider.addEventListener('touchstart', (e) => {
+    stopAutoSlide();
+    startX = e.touches[0].clientX;
+    isDragging = true;
+  });
+
+  slider.addEventListener('touchmove', (e) => {
+    if(!isDragging) return;
+    let currentX = e.touches[0].clientX;
+    let diff = startX - currentX;
+
+    if(diff > 50) { // swipe kiri → slide berikutnya
+      index = (index + 1) % slides.length;
+      updateSlide();
+      isDragging = false;
+    } 
+    else if(diff < -50) { // swipe kanan → slide sebelumnya
+      index = (index - 1 + slides.length) % slides.length;
+      updateSlide();
+      isDragging = false;
+    }
+  });
+
+  slider.addEventListener('touchend', () => {
+    isDragging = false;
+    startAutoSlide();
+  });
+
+  // Mulai
+  updateSlide();
+  startAutoSlide();
+})();
 
     /* ========= Login / PIN ========= */
     const verifyWrap = document.getElementById('startupVerify');
