@@ -1,4 +1,63 @@
 
+/*verivikasi login bug*/
+  function showStep(stepId) {
+    document.querySelectorAll('#startupVerify > .box > div').forEach(el => {
+      if (el.id.startsWith("verifyStep")) {
+        el.classList.add("hidden");
+      }
+    });
+    document.getElementById(stepId).classList.remove("hidden");
+  }
+
+  document.getElementById("btnSendOtp").addEventListener("click", function() {
+    let phone = document.getElementById("startupPhone").value;
+    if (phone.length < 9) {
+      alert("Nomor HP tidak valid ❌");
+      return;
+    }
+    alert("OTP terkirim ke " + phone);
+    showStep("verifyStepOTP");
+  });
+
+  document.getElementById("btnVerifyOtp").addEventListener("click", function() {
+    let otp = document.getElementById("startupOTP").value;
+    if (otp.length === 6) {
+      alert("OTP benar ✅");
+      showStep("verifyStepSetPIN");
+    } else {
+      alert("Kode OTP salah ❌");
+    }
+  });
+
+  document.getElementById("btnResendOtp").addEventListener("click", function() {
+    alert("OTP dikirim ulang 🔄");
+  });
+
+  document.getElementById("btnSavePin").addEventListener("click", function() {
+    let pin1 = document.getElementById("startupSetPIN1").value;
+    let pin2 = document.getElementById("startupSetPIN2").value;
+    if (pin1.length === 6 && pin1 === pin2) {
+      alert("PIN tersimpan ✅");
+      showStep("verifyStepPIN");
+    } else {
+      alert("PIN tidak cocok ❌");
+    }
+  });
+
+  document.getElementById("btnVerifyPin").addEventListener("click", function() {
+    let pin = document.getElementById("startupPIN").value;
+    if (pin.length === 6) {
+      alert("Login berhasil 🎉");
+      document.getElementById("startupVerify").style.display = "none";
+    } else {
+      alert("PIN salah ❌");
+    }
+  });
+
+  document.getElementById("btnHavePin").addEventListener("click", function() {
+    showStep("verifyStepPIN");
+  });
+
 /* ========= Helpers ========= */
     const rupiah = n => 'Rp' + (n||0).toLocaleString('id-ID');
     const qs  = s => document.querySelector(s);
