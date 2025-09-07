@@ -79,89 +79,109 @@
 })();
 
     /* ========= Login / PIN ========= */
-    const verifyWrap = document.getElementById('startupVerify');
-    const stepPhone  = document.getElementById('verifyStepPhone');
-    const stepOTP    = document.getElementById('verifyStepOTP');
-    const stepSetPIN = document.getElementById('verifyStepSetPIN');
-    const stepPIN    = document.getElementById('verifyStepPIN');
-    const MOCK_OTP = '123456';
+const verifyWrap = document.getElementById('startupVerify');
+const stepPhone  = document.getElementById('verifyStepPhone');
+const stepOTP    = document.getElementById('verifyStepOTP');
+const stepSetPIN = document.getElementById('verifyStepSetPIN');
+const stepPIN    = document.getElementById('verifyStepPIN');
+const MOCK_OTP = '123456';
+const PIN_KEY = "app_pin";
+const LOGIN_KEY = "app_login";
+const BAL_KEY = "app_balance";
 
-    function showStep(el){ [stepPhone, stepOTP, stepSetPIN, stepPIN].forEach(x=>x.classList.add('hidden')); el.classList.remove('hidden'); }
+// simulasi storage pakai localStorage
+const storage = {
+  get: (key, def) => JSON.parse(localStorage.getItem(key)) ?? def,
+  set: (key, val) => localStorage.setItem(key, JSON.stringify(val))
+};
 
-    document.getElementById('havePinBtn').addEventListener('click', ()=>{
-      const saved = storage.get(PIN_KEY,null);
-      if(saved){ showStep(stepPIN); }
-      else { alert('Belum ada PIN tersimpan. Silakan buat PIN baru.'); }
-    });
+function showStep(el) {
+  [stepPhone, stepOTP, stepSetPIN, stepPIN].forEach(x => x.classList.add('hidden'));
+  el.classList.remove('hidden');
+}
 
-    function startupSendOTP(){
-      const phone = document.getElementById('startupPhone').value.trim();
-      if(!/^0[0-9]{9,13}$/.test(phone)){ alert('Nomor HP tidak valid'); return; }
-      alert('OTP dikirim ke '+phone+' (demo gunakan '+MOCK_OTP+')');
-      showStep(stepOTP);
-    }
-    function startupResendOTP(){ alert('OTP baru terkirim (demo: '+MOCK_OTP+')'); }
-    function startupVerifyOTP(){
-      const otp = document.getElementById('startupOTP').value.trim();
-      if(otp===MOCK_OTP){ showStep(stepSetPIN); }
-      else alert('OTP salah');
-    }
-    function startupSavePIN(){
-      const p1 = document.getElementById('startupSetPIN1').value.trim();
-      const p2 = document.getElementById('startupSetPIN2').value.trim();
-      if(!/^[0-9]{6}$/.test(p1)){ alert('PIN harus 6 digit'); return; }
-      if(p1!==p2){ alert('PIN tidak sama'); return; }
-      storage.set(PIN_KEY, p1);
-      storage.set(LOGIN_KEY, true);
-      verifyWrap.style.display = 'none';
-      initAfterLogin();
-    }
-    function startupVerifyPIN(){
-      const pin = document.getElementById('startupPIN').value.trim();
-      const saved = storage.get(PIN_KEY,null);
-      if(saved && pin===saved){
-        storage.set(LOGIN_KEY,true);
-        verifyWrap.style.display='none';
-        initAfterLogin();
-      }else alert('PIN salah');
-    }
-    window.startupSendOTP = startupSendOTP;
-    window.startupResendOTP = startupResendOTP;
-    window.startupVerifyOTP = startupVerifyOTP;
-    window.startupSavePIN = startupSavePIN;
-    window.startupVerifyPIN = startupVerifyPIN;
+// ============ Event tombol ============ //
+document.getElementById('btnHavePin').addEventListener('click', () => {
+  const saved = storage.get(PIN_KEY, null);
+  if (saved) { showStep(stepPIN); }
+  else { alert('Belum ada PIN tersimpan. Silakan buat PIN baru.'); }
+});
 
-    // lock scroll while verify
-    (function(){
-      const main = document.getElementById('mainScroll');
-      const obs = new MutationObserver(()=>{ if(verifyWrap.style.display==='none') main.style.overflow='auto'; else main.style.overflow='hidden'; });
-      obs.observe(verifyWrap,{attributes:true, attributeFilter:['style']});
-      if(verifyWrap.style.display!=='none') main.style.overflow='hidden';
-    })();
+document.getElementById('btnSendOtp').addEventListener('click', startupSendOTP);
+document.getElementById('btnVerifyOtp').addEventListener('click', startupVerifyOTP);
+document.getElementById('btnResendOtp').addEventListener('click', startupResendOTP);
+document.getElementById('btnSavePin').addEventListener('click', startupSavePIN);
+document.getElementById('btnVerifyPin').addEventListener('click', startupVerifyPIN);
 
-    function logout(){
-      storage.set(LOGIN_KEY,false); // sesi berakhir, PIN tetap
-      verifyWrap.style.display='flex';
-      showStep(stepPIN);
-    }
+// ============ Fungsi verifikasi ============ //
+function startupSendOTP() {
+  const phone = document.getElementById('startupPhone').value.trim();
+  if (!/^0[0-9]{9,13}$/.test(phone)) { alert('Nomor HP tidak valid'); return; }
+  alert('OTP dikirim ke ' + phone + ' (demo gunakan ' + MOCK_OTP + ')');
+  showStep(stepOTP);
+}
 
-    // Balance init
-    function initBalance(){
-      let b = storage.get(BAL_KEY, null);
-      if(b===null){ b = 1487500; storage.set(BAL_KEY,b); }
-      document.getElementById('balance').innerText = b.toLocaleString('id-ID');
-    }
+function startupResendOTP() {
+  alert('OTP baru terkirim (demo: ' + MOCK_OTP + ')');
+}
 
-    function initAfterLogin(){
-      initBalance();
-      renderHistory(); // refresh aktivitas
-    }
+function startupVerifyOTP() {
+  const otp = document.getElementById('startupOTP').value.trim();
+  if (otp === MOCK_OTP) { showStep(stepSetPIN); }
+  else alert('OTP salah');
+}
 
-    // boot
-    (function boot(){
-      if(storage.get(LOGIN_KEY,false)){ verifyWrap.style.display='none'; initAfterLogin(); }
-      else { verifyWrap.style.display='flex'; const hasPin = storage.get(PIN_KEY,null); showStep(hasPin?stepPIN:stepPhone); }
-    })();
+function startupSavePIN() {
+  const p1 = document.getElementById('startupSetPIN1').value.trim();
+  const p2 = document.getElementById('startupSetPIN2').value.trim();
+  if (!/^[0-9]{6}$/.test(p1)) { alert('PIN harus 6 digit'); return; }
+  if (p1 !== p2) { alert('PIN tidak sama'); return; }
+  storage.set(PIN_KEY, p1);
+  storage.set(LOGIN_KEY, true);
+  verifyWrap.style.display = 'none';
+  initAfterLogin();
+}
+
+function startupVerifyPIN() {
+  const pin = document.getElementById('startupPIN').value.trim();
+  const saved = storage.get(PIN_KEY, null);
+  if (saved && pin === saved) {
+    storage.set(LOGIN_KEY, true);
+    verifyWrap.style.display = 'none';
+    initAfterLogin();
+  } else alert('PIN salah');
+}
+
+// ============ Logout ============ //
+function logout() {
+  storage.set(LOGIN_KEY, false); // sesi berakhir, PIN tetap
+  verifyWrap.style.display = 'flex';
+  showStep(stepPIN);
+}
+
+// ============ Balance ============ //
+function initBalance() {
+  let b = storage.get(BAL_KEY, null);
+  if (b === null) { b = 1487500; storage.set(BAL_KEY, b); }
+  document.getElementById('balance').innerText = b.toLocaleString('id-ID');
+}
+
+function initAfterLogin() {
+  initBalance();
+  if (typeof renderHistory === "function") renderHistory();
+}
+
+// ============ Boot awal ============ //
+(function boot() {
+  if (storage.get(LOGIN_KEY, false)) {
+    verifyWrap.style.display = 'none';
+    initAfterLogin();
+  } else {
+    verifyWrap.style.display = 'flex';
+    const hasPin = storage.get(PIN_KEY, null);
+    showStep(hasPin ? stepPIN : stepPhone);
+  }
+})();
 
     /* ========= Bottom Nav Tabs ========= */
     const sections = {
