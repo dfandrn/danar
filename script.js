@@ -78,144 +78,166 @@
   startAutoSlide();
 })();
 
-    /* ========= Login / PIN ========= */
+    /* ========= Storage Helper ========= */
+const storage = {
+  get(k, def) {
+    try {
+      const v = JSON.parse(localStorage.getItem(k));
+      return (v === null || v === undefined) ? def : v;
+    } catch(e) {
+      return def;
+    }
+  },
+  set(k, v) {
+    localStorage.setItem(k, JSON.stringify(v));
+  },
+  del(k) {
+    localStorage.removeItem(k);
+  }
+};
+
+/* ========= Key ========= */
+const BAL_KEY   = 'dana_balance';
+const PIN_KEY   = 'dana_pin';
+const LOGIN_KEY = 'dana_logged_in';
+
+/* ========= Login / PIN ========= */
 const verifyWrap = document.getElementById('startupVerify');
 const stepPhone  = document.getElementById('verifyStepPhone');
 const stepOTP    = document.getElementById('verifyStepOTP');
 const stepSetPIN = document.getElementById('verifyStepSetPIN');
 const stepPIN    = document.getElementById('verifyStepPIN');
-const MOCK_OTP = '123456';
-const PIN_KEY = "app_pin";
-const LOGIN_KEY = "app_login";
-const BAL_KEY = "app_balance";
+const MOCK_OTP   = '123456';
 
-// simulasi storage pakai localStorage
-const storage = {
-  get: (key, def) => JSON.parse(localStorage.getItem(key)) ?? def,
-  set: (key, val) => localStorage.setItem(key, JSON.stringify(val))
-};
-
-function showStep(el) {
-  [stepPhone, stepOTP, stepSetPIN, stepPIN].forEach(x => x.classList.add('hidden'));
+function showStep(el){
+  [stepPhone, stepOTP, stepSetPIN, stepPIN].forEach(x=>x.classList.add('hidden'));
   el.classList.remove('hidden');
 }
 
-// ============ Event tombol ============ //
-document.getElementById('btnHavePin').addEventListener('click', () => {
-  const saved = storage.get(PIN_KEY, null);
-  if (saved) { showStep(stepPIN); }
+document.getElementById('havePinBtn').addEventListener('click', ()=>{
+  const saved = storage.get(PIN_KEY,null);
+  if(saved){ showStep(stepPIN); }
   else { alert('Belum ada PIN tersimpan. Silakan buat PIN baru.'); }
 });
 
-document.getElementById('btnSendOtp').addEventListener('click', startupSendOTP);
-document.getElementById('btnVerifyOtp').addEventListener('click', startupVerifyOTP);
-document.getElementById('btnResendOtp').addEventListener('click', startupResendOTP);
-document.getElementById('btnSavePin').addEventListener('click', startupSavePIN);
-document.getElementById('btnVerifyPin').addEventListener('click', startupVerifyPIN);
-
-// ============ Fungsi verifikasi ============ //
-function startupSendOTP() {
+function startupSendOTP(){
   const phone = document.getElementById('startupPhone').value.trim();
-  if (!/^0[0-9]{9,13}$/.test(phone)) { alert('Nomor HP tidak valid'); return; }
-  alert('OTP dikirim ke ' + phone + ' (demo gunakan ' + MOCK_OTP + ')');
+  if(!/^0[0-9]{9,13}$/.test(phone)){ alert('Nomor HP tidak valid'); return; }
+  alert('OTP dikirim ke '+phone+' (demo gunakan '+MOCK_OTP+')');
   showStep(stepOTP);
 }
-
-function startupResendOTP() {
-  alert('OTP baru terkirim (demo: ' + MOCK_OTP + ')');
-}
-
-function startupVerifyOTP() {
+function startupResendOTP(){ alert('OTP baru terkirim (demo: '+MOCK_OTP+')'); }
+function startupVerifyOTP(){
   const otp = document.getElementById('startupOTP').value.trim();
-  if (otp === MOCK_OTP) { showStep(stepSetPIN); }
+  if(otp===MOCK_OTP){ showStep(stepSetPIN); }
   else alert('OTP salah');
 }
-
-function startupSavePIN() {
+function startupSavePIN(){
   const p1 = document.getElementById('startupSetPIN1').value.trim();
   const p2 = document.getElementById('startupSetPIN2').value.trim();
-  if (!/^[0-9]{6}$/.test(p1)) { alert('PIN harus 6 digit'); return; }
-  if (p1 !== p2) { alert('PIN tidak sama'); return; }
+  if(!/^[0-9]{6}$/.test(p1)){ alert('PIN harus 6 digit'); return; }
+  if(p1!==p2){ alert('PIN tidak sama'); return; }
   storage.set(PIN_KEY, p1);
   storage.set(LOGIN_KEY, true);
   verifyWrap.style.display = 'none';
   initAfterLogin();
 }
-
-function startupVerifyPIN() {
+function startupVerifyPIN(){
   const pin = document.getElementById('startupPIN').value.trim();
-  const saved = storage.get(PIN_KEY, null);
-  if (saved && pin === saved) {
-    storage.set(LOGIN_KEY, true);
-    verifyWrap.style.display = 'none';
+  const saved = storage.get(PIN_KEY,null);
+  if(saved && pin===saved){
+    storage.set(LOGIN_KEY,true);
+    verifyWrap.style.display='none';
     initAfterLogin();
-  } else alert('PIN salah');
+  }else alert('PIN salah');
 }
+window.startupSendOTP = startupSendOTP;
+window.startupResendOTP = startupResendOTP;
+window.startupVerifyOTP = startupVerifyOTP;
+window.startupSavePIN = startupSavePIN;
+window.startupVerifyPIN = startupVerifyPIN;
 
-// ============ Logout ============ //
-function logout() {
-  storage.set(LOGIN_KEY, false); // sesi berakhir, PIN tetap
-  verifyWrap.style.display = 'flex';
+/* ========= Lock scroll while verify ========= */
+(function(){
+  const main = document.getElementById('mainScroll');
+  const obs = new MutationObserver(()=>{
+    if(verifyWrap.style.display==='none') main.style.overflow='auto';
+    else main.style.overflow='hidden';
+  });
+  obs.observe(verifyWrap,{attributes:true, attributeFilter:['style']});
+  if(verifyWrap.style.display!=='none') main.style.overflow='hidden';
+})();
+
+function logout(){
+  storage.set(LOGIN_KEY,false); // sesi berakhir, PIN tetap
+  verifyWrap.style.display='flex';
   showStep(stepPIN);
 }
 
-// ============ Balance ============ //
-function initBalance() {
+/* ========= Balance init ========= */
+function initBalance(){
   let b = storage.get(BAL_KEY, null);
-  if (b === null) { b = 1487500; storage.set(BAL_KEY, b); }
+  if(b===null){ b = 1487500; storage.set(BAL_KEY,b); }
   document.getElementById('balance').innerText = b.toLocaleString('id-ID');
 }
 
-function initAfterLogin() {
+function initAfterLogin(){
   initBalance();
-  if (typeof renderHistory === "function") renderHistory();
+  renderHistory(); // refresh aktivitas
 }
 
-// ============ Boot awal ============ //
-(function boot() {
-  if (storage.get(LOGIN_KEY, false)) {
-    verifyWrap.style.display = 'none';
+/* ========= Boot ========= */
+(function boot(){
+  if(storage.get(LOGIN_KEY,false)){
+    verifyWrap.style.display='none';
     initAfterLogin();
   } else {
-    verifyWrap.style.display = 'flex';
-    const hasPin = storage.get(PIN_KEY, null);
+    verifyWrap.style.display='flex';
+    const hasPin = storage.get(PIN_KEY,null);
     showStep(hasPin ? stepPIN : stepPhone);
   }
 })();
 
-    /* ========= Bottom Nav Tabs ========= */
-    const sections = {
-      tabHome: 'homeSection',
-      tabAktivitas: 'activitySection',
-      tabPay: 'paySection',
-      tabWallet: 'walletSection'
-    };
-    Object.keys(sections).forEach(tabId=>{
-      const btn = document.getElementById(tabId);
-      btn.addEventListener('click', ()=>{
-        // protect: require login
-        if(verifyWrap.style.display !== 'none'){ alert('Silakan verifikasi terlebih dahulu.'); return; }
-        // toggle active
-        qsa('.bottom-nav button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
-        // show section
-        Object.values(sections).forEach(id=> qs('#'+id).classList.add('hidden'));
-        qs('#'+sections[tabId]).classList.remove('hidden');
-      });
-    });
-    document.getElementById('tabLogout').addEventListener('click', ()=>{
-      if(confirm('Yakin ingin logout?')) logout();
-    });
+/* ========= Bottom Nav Tabs ========= */
+const sections = {
+  tabHome: 'homeSection',
+  tabAktivitas: 'activitySection',
+  tabPay: 'paySection',
+  tabWallet: 'walletSection'
+};
+Object.keys(sections).forEach(tabId=>{
+  const btn = document.getElementById(tabId);
+  btn.addEventListener('click', ()=>{
+    if(verifyWrap.style.display !== 'none'){ 
+      alert('Silakan verifikasi terlebih dahulu.'); 
+      return; 
+    }
+    qsa('.bottom-nav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    Object.values(sections).forEach(id=> qs('#'+id).classList.add('hidden'));
+    qs('#'+sections[tabId]).classList.remove('hidden');
+  });
+});
+document.getElementById('tabLogout').addEventListener('click', ()=>{
+  if(confirm('Yakin ingin logout?')) logout();
+});
 
-    /* ========= Proteksi klik fitur sebelum login ========= */
-    const protectIds = ["topUpBtn","withdrawBtn","pulsaDataBtn","listrikBtn","googlePlayBtn","topUpGameBtn","dagetBtn","dataPlusBtn","sendMoneyBtn","qrPayBtn","danaPolyBtn","rewardBtn","danaDealsBtn"];
-    protectIds.forEach(id=>{
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.addEventListener('click', (e)=>{
-        if(verifyWrap.style.display !== 'none'){ e.preventDefault(); alert('Silakan verifikasi terlebih dahulu.'); }
-      });
-    });
-
+/* ========= Proteksi klik fitur sebelum login ========= */
+const protectIds = [
+  "topUpBtn","withdrawBtn","pulsaDataBtn","listrikBtn",
+  "googlePlayBtn","topUpGameBtn","dagetBtn","dataPlusBtn",
+  "sendMoneyBtn","qrPayBtn","danaPolyBtn","rewardBtn","danaDealsBtn"
+];
+protectIds.forEach(id=>{
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('click', (e)=>{
+    if(verifyWrap.style.display !== 'none'){ 
+      e.preventDefault(); 
+      alert('Silakan verifikasi terlebih dahulu.'); 
+    }
+  });
+});
     /* ========= SHEET Controls ========= */
 const pulsaSheet    = document.getElementById('pulsaSheet');
 const listrikSheet    = document.getElementById('listrikSheet');
